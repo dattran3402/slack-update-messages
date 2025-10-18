@@ -40,7 +40,7 @@ const getConversationHistory = async ({ channelId, limit }) => {
 
     return messages;
   } catch (error) {
-    console.error("Error getting conversation history", error);
+    console.error("Error getting conversation history for channel", channelId, error);
     return [];
   }
 };
@@ -54,7 +54,7 @@ const updateMessage = async ({ channelId, ts, text }) => {
     });
   }
   catch (error) {
-    console.error("Error updating message", error);
+    console.error("Error updating message for channel", channelId, ts, error);
   }
 };
 
