@@ -21,22 +21,22 @@ const client = new WebClient(userToken);
 // MAIN LOGIC
 // -------------------------
 
-const getConversationHistory = async ({ channelId, limit }) => {
+const getConversationHistory = async ({ channelId }) => {
   try {
     // loop to get all limit messages from the channel
     let messages = [];
     let cursor = null;
     const MAX_LIMIT_PER_REQUEST = 999;
 
-    while (!limit || messages.length < limit) {
+    do {
       const history = await client.conversations.history({
         channel: channelId,
-        limit: Math.min(MAX_LIMIT_PER_REQUEST, limit || MAX_LIMIT_PER_REQUEST),
+        limit: MAX_LIMIT_PER_REQUEST,
         cursor: cursor,
       });
       messages.push(...history.messages);
       cursor = history.response_metadata?.next_cursor;
-    }
+    } while (cursor);
 
     return messages;
   } catch (error) {
@@ -60,7 +60,7 @@ const updateMessage = async ({ channelId, ts, text }) => {
 
 const main = async () => {
   for (const channelId of channelIds) {
-    const messages = await getConversationHistory({ channelId, limit: 10 });
+    const messages = await getConversationHistory({ channelId });
     for (const msg of messages) {
       await updateMessage({ channelId, ts: msg.ts, text: message });
     }
