@@ -16,7 +16,7 @@
 
 - Scroll up and copy `User OAuth Token`
 
-- If the run script fails with authentication errors, try `Reinstall to DSS`
+- If the run script fails with authentication errors, try `Reinstall to ...`
 
 # Run script
 
