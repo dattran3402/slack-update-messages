@@ -12,6 +12,7 @@ const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
 const channelIds = config.channelIds;
 const message = config.message;
 const userToken = config.userToken;
+const currentUserId = config.currentUserId
 
 console.log("Loaded config", config);
 
@@ -62,7 +63,12 @@ const main = async () => {
   for (const channelId of channelIds) {
     const messages = await getConversationHistory({ channelId });
     for (const msg of messages) {
+      if (msg.text.includes(message) || msg.user !== currentUserId) {
+        console.log("Skip message: ", msg.text);
+        continue;
+      }
       await updateMessage({ channelId, ts: msg.ts, text: message });
+      console.log("Updated message: " + msg.text + " at: " + new Date(msg.ts * 1000).toISOString());
     }
   }
 };
